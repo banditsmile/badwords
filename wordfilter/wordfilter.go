@@ -106,5 +106,3 @@ func Search(tree *wordTree, txt *[]string, replacement string) *map[string]int {
 	return &s.matched
 }
 
-
-func add(tree *wordTree,)

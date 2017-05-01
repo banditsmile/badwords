@@ -52,12 +52,20 @@ func reload(w http.ResponseWriter, r *http.Request){
 	w.Write([]byte("hello"))
 }
 
+func add(w http.ResponseWriter,r *http.Request){
+
+}
+
 func replace(w http.ResponseWriter, r *http.Request) {
 	run(w, r, true)
 }
 
 func match(w http.ResponseWriter, r *http.Request) {
 	run(w, r, false)
+}
+
+func view(w http.ResponseWriter, r *http.Request){
+	fmt.Println(wT)
 }
 
 func main() {
@@ -70,6 +78,8 @@ func main() {
 	http.HandleFunc("/match", match)
 	http.HandleFunc("/replace", replace)
 	http.HandleFunc("/reload", reload)
+	http.HandleFunc("/add", add)
+	http.HandleFunc("/view",view)
 	server := &http.Server{
 		Addr:	strings.Join([]string{os.Args[1], os.Args[2]}, ":"),
 		ReadTimeout:  15 * time.Second,
