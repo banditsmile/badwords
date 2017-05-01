@@ -6,6 +6,8 @@ import (
 	"os"
 	"sort"
 	"strings"
+	"io"
+	"io/ioutil"
 )
 
 type wordMap struct {
@@ -17,6 +19,7 @@ type wordMap struct {
 type wordTree struct {
 	wordMaxLen int
 	trees      map[string]*wordMap
+	file	string
 }
 
 func (t *wordTree) add(word string) {
@@ -42,6 +45,62 @@ func (t *wordTree) add(word string) {
 	}
 }
 
+func (t *wordTree) Add(word string){
+	t.add(word)
+	t.addToFile(word)
+}
+
+//save new  word to file
+func (t *wordTree) addToFile(word string){
+	inputFile, inputError := os.OpenFile(t.file,os.O_RDWR, 0666)
+	if inputError != nil {
+		fmt.Println("An error occurred on opening the inputfile\n" +
+			"Does the file exist?\n" +
+			"Have you got acces to it?\n")
+		return // exit the function on error
+	}
+	defer inputFile.Close()
+	inputReader := bufio.NewReader(inputFile)
+	for {
+		inputString, readerError := inputReader.ReadString('\n')
+		inputString = strings.Trim(inputString,"\n")
+		if inputString==word{
+			return
+		}
+		if readerError == io.EOF {
+			outputWriter := bufio.NewWriter(inputFile)
+			outputWriter.WriteString(word+"\n")
+			outputWriter.Flush()
+			return
+		}
+	}
+
+}
+func (t *wordTree) Del(word string){
+	t.del(word)
+	t.delFromFile(word)
+}
+
+func (t *wordTree) del(word string){
+	return
+}
+
+func (t *wordTree) delFromFile(word string){
+	input, err := ioutil.ReadFile(t.file)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	lines := strings.Split(string(input), "\n")
+	delete(lines,word)
+
+	output := strings.Join(lines, "\n")
+	err = ioutil.WriteFile(t.file, []byte(output), 0644)
+	if err != nil {
+		fmt.Println(err)
+	}
+	return
+}
 type search struct {
 	txt         *[]string
 	txtLen      int
@@ -84,6 +143,7 @@ func (s *search) run() {
 
 func Init(filename string) *wordTree {
 	wT := &wordTree{}
+	wT.file = filename
 	f, err := os.Open(filename)
 	if err != nil {
 		fmt.Println(err.Error())

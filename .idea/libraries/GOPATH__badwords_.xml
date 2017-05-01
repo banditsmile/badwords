@@ -1,0 +1,23 @@
+<component name="libraryTable">
+  <library name="GOPATH &lt;badwords&gt;">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/../../go/src/poll" />
+      <root url="file://$PROJECT_DIR$/../../go/src/quickstart" />
+      <root url="file://$PROJECT_DIR$/../../go/src/test" />
+      <root url="file://$PROJECT_DIR$/../../go/src/hello" />
+      <root url="file://$PROJECT_DIR$/../../go/src/badwords" />
+      <root url="file://$PROJECT_DIR$/../../go/src/github.com" />
+    </CLASSES>
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/../../go/src/poll" />
+      <root url="file://$PROJECT_DIR$/../../go/src/quickstart" />
+      <root url="file://$PROJECT_DIR$/../../go/src/test" />
+      <root url="file://$PROJECT_DIR$/../../go/src/hello" />
+      <root url="file://$PROJECT_DIR$/../../go/src/badwords" />
+      <root url="file://$PROJECT_DIR$/../../go/src/github.com" />
+    </SOURCES>
+    <excluded>
+      <root url="file://$PROJECT_DIR$" />
+    </excluded>
+  </library>
+</component>

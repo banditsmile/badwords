@@ -53,7 +53,31 @@ func reload(w http.ResponseWriter, r *http.Request){
 }
 
 func add(w http.ResponseWriter,r *http.Request){
+	result := make(map[string]interface{})
+	if r.Method == "POST"{
+		r.ParseForm()
+		for k, v := range r.PostForm{
+			word := strings.Join(v,"")
+			wT.Add(word)
+			result[k]=word
+		}
+		enc :=json.NewEncoder(w)
+		enc.Encode(result)
+	}
+}
 
+func del(w http.ResponseWriter,r *http.Request){
+	result := make(map[string]interface{})
+	if r.Method == "POST"{
+		r.ParseForm()
+		for k, v := range r.PostForm{
+			word := strings.Join(v,"")
+			wT.Del(word)
+			result[k]=word
+		}
+		enc :=json.NewEncoder(w)
+		enc.Encode(result)
+	}
 }
 
 func replace(w http.ResponseWriter, r *http.Request) {
@@ -79,6 +103,7 @@ func main() {
 	http.HandleFunc("/replace", replace)
 	http.HandleFunc("/reload", reload)
 	http.HandleFunc("/add", add)
+	http.HandleFunc("/del", del)
 	http.HandleFunc("/view",view)
 	server := &http.Server{
 		Addr:	strings.Join([]string{os.Args[1], os.Args[2]}, ":"),
