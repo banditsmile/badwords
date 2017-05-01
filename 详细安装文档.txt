@@ -1,0 +1,41 @@
+
+[以下以 linux_64 安装目录为: /data/badwords_server 为示例讲解]
+
+
+一：复制当前目录下所有文件
+cp -f * /data/badwords_server/
+chmod a+x badwords_server monitor.sh
+
+二：启动服务
+sh monitor.sh
+cat ./log/badwords.log (第一次启动时无内容表示正常，如果报错，则要重新在你的平台上编译)
+
+三：测试
+netstat -nlpt | grep 8082
+
+curl -d "txt=my fuck you" "http://127.0.0.1:8082/replace"  结果显示: {"txt":"my **** you"}
+curl -d "txt=my fuck you" "http://127.0.0.1:8082/match"    结果显示: {"txt":{"fuck":1}}
+
+四：将服务增加到crontab监控中
+*/1 * * * * /bin/bash /data/badwords_server/monitor.sh
+
+五：更新关键字
+1：更新 /data/badwords_server/badwords.txt
+2: 重启服务:
+killall badwords_server
+sh monitor.sh
+
+六：重要说明
+1：ip:port 默认为 0.0.0.0:8082 可以修改 monitor.sh
+2：关键词是读的当前目录下的 badwords.txt 文件，这个不可以修改
+3：更新关键字 badwords.txt 时，每行一个词，并且不能有空行。
+
+
+七：自己平台重新编译安装：
+
+1:先下载 https://golang.org/dl/ (linux下直播解压即可)
+2:假设安装在 /usr/local/go
+3:编译
+cd /data/badwords_server
+/usr/local/go/bin/go build -o badwords_server main.go
+chmod a+x badwords_server
