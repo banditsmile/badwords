@@ -81,10 +81,14 @@ func (t *wordTree) Del(word string){
 	t.delFromFile(word)
 }
 
+//delete from memory
 func (t *wordTree) del(word string){
+	//reload word dictionary
+	Init(t.file)
 	return
 }
 
+//delete from file
 func (t *wordTree) delFromFile(word string){
 	input, err := ioutil.ReadFile(t.file)
 	if err != nil {
@@ -92,7 +96,12 @@ func (t *wordTree) delFromFile(word string){
 	}
 
 	lines := strings.Split(string(input), "\n")
-	delete(lines,word)
+	for i,v :=range lines {
+		if v==word{
+			lines= append(lines[:i],lines[i+1:]...)
+			fmt.Println(i,v)
+		}
+	}
 
 	output := strings.Join(lines, "\n")
 	err = ioutil.WriteFile(t.file, []byte(output), 0644)
@@ -100,6 +109,16 @@ func (t *wordTree) delFromFile(word string){
 		fmt.Println(err)
 	}
 	return
+}
+
+func (t *wordTree) View() ([]string){
+	input, err := ioutil.ReadFile(t.file)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	lines := strings.Split(string(input), "\n")
+	return lines
 }
 type search struct {
 	txt         *[]string

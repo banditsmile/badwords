@@ -80,6 +80,12 @@ func del(w http.ResponseWriter,r *http.Request){
 	}
 }
 
+func view(w http.ResponseWriter, r *http.Request){
+	result := wT.View()
+	enc :=json.NewEncoder(w)
+	enc.Encode(result)
+}
+
 func replace(w http.ResponseWriter, r *http.Request) {
 	run(w, r, true)
 }
@@ -88,9 +94,7 @@ func match(w http.ResponseWriter, r *http.Request) {
 	run(w, r, false)
 }
 
-func view(w http.ResponseWriter, r *http.Request){
-	fmt.Println(wT)
-}
+
 
 func main() {
 	defer func() {
